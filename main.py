@@ -1,4 +1,3 @@
-import os
 import winreg
 
 def get_license_server_info():
@@ -26,6 +25,8 @@ def get_license_server_info():
 
     if not license_file_found:
         print("Путь к серверу лицензий не найден.")
+
+    input("Нажмите любую клавишу для выхода...")
 
 if __name__ == "__main__":
     get_license_server_info()
