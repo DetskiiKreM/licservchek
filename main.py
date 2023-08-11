@@ -1,3 +1,4 @@
+import os
 import winreg
 
 def get_license_server_info():
@@ -7,24 +8,18 @@ def get_license_server_info():
         r"SOFTWARE\Wow6432Node\FLEXlm License Manager"
     ]
 
-    license_file_found = False
-
     for reg_path in reg_paths:
         try:
             # Открываем соответствующий путь реестра
             with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, reg_path) as key:
-                # Получаем значение @CSOFT_LICENSE_FILE
-                try:
-                    license_file = winreg.QueryValueEx(key, "@CSOFT_LICENSE_FILE")[0]
-                    print("Путь к файлу лицензии:", license_file)
-                    license_file_found = True
-                except FileNotFoundError:
-                    pass
-        except FileNotFoundError:
-            pass
-
-    if not license_file_found:
-        print("Путь к серверу лицензий не найден.")
+                print("Информация из", reg_path)
+                print("=" * 40)
+                for i in range(winreg.QueryInfoKey(key)[1]):
+                    name, value, _ = winreg.EnumValue(key, i)
+                    print(f"{name}: {value}")
+                print("=" * 40)
+        except Exception as e:
+            print("Ошибка при доступе к реестру:", e)
 
     input("Нажмите любую клавишу для выхода...")
 
